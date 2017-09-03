@@ -5,11 +5,53 @@ process.env.MOCK = true;
 
 let server = require('../server');
 let chai = require('chai');
-let chaiHttp = require('chai-http');
 let expect =  require('chai').expect;
-let should = chai.should();
+let should = require('chai').should();
 
-chai.use(chaiHttp);
+chai.use(require('chai-http'));
+chai.use(require('chai-json-schema'));
+
+
+var wordsApiResponseSchema = {
+  title: 'Words API response schema',
+  type: 'object',
+  required: ['word', 'results'],
+  properties: {
+    word: {
+      type: 'string'
+    },
+    results: {
+      type: 'array',
+      minItems: 1,
+      uniqueItems: true,
+      items: {
+        type: 'object',
+        required: ['definition', 'partOfSpeech'],
+        properties: {
+          definition: {
+            type: 'string'
+          },
+          partOfSpeech: {
+            type: 'string'
+          },
+          synonyms: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          },
+          examples: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          },
+        }
+      }
+    }
+  }
+};
+
 
 describe('Thesaurus', () => {
   
@@ -26,13 +68,40 @@ describe('Thesaurus', () => {
   });
   
   describe('GET /words/example', () => {
-    it('it should return mock', (done) => {
+    it('it should return valid mock', (done) => {
+      chai.request(server)
+        .get('/words/example')
+        .end((err, res) => {
+          expect(res).to.be.json;
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          expect(res.body).to.be.jsonSchema(wordsApiResponseSchema);
+          done();
+        });
+    });
+  });
+
+  describe('GET /words/work', () => {
+    it('it should return valid mock', (done) => {
       chai.request(server)
         .get('/words/work')
         .end((err, res) => {
           expect(res).to.be.json;
           res.should.have.status(200);
           res.body.should.be.a('object');
+          expect(res.body).to.be.jsonSchema(wordsApiResponseSchema);
+          done();
+        });
+    });
+  });
+
+  describe('GET /words/cthulhu', () => {
+    it('it should return \'unauthorized\' code', (done) => {
+      chai.request(server)
+        .get('/words/Cthulhu')
+        .end((err, res) => {
+          expect(res).to.be.json;
+          res.should.have.status(403);
           done();
         });
     });
