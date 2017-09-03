@@ -9,7 +9,7 @@ const port = process.env.PORT || ( ( process.argv.length >= 3 && !isNaN(process.
 );
 const akey = process.env.AKEY || ( ( process.argv.length >= 4 )
   ? process.argv[3]
-  : 'bPNbLXJ0tmmshm3dkk0VQOiUeiPlp186ggvjsnKnaGsiIVnGAe'
+  : 'qwerty'
 );
 const mock = process.env.MOCK || ( process.argv.length >= 5 && ( parseInt(process.argv[4]) || process.argv[4].toUpperCase()==='TRUE' ) );
 
