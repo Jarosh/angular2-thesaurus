@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Backend API server
 
-`cd srv` and run `node server [ port [ mashape-key [ use-mocks ] ] ]` e.g. `node server 3000 qwerty 1`
+`cd srv` and run `node server [ port [ mashape-key [ use-mocks ] ] ]` e.g. `node server 3000 qwerty true`
 
 With `use-mocks` option set to either `1` or `true` local mocks will be used for the following two words: 'example', 'work';
 hence guaranteeing positive response for those two words even if invalid mashape key was provided.
