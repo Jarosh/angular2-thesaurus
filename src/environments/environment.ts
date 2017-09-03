@@ -4,5 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  wordsApiKey: 'qwerty',
+  wordsApiUrl: 'http://localhost:3000/words/{%word%}'
 };

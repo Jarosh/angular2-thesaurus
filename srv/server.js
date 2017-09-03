@@ -5,41 +5,33 @@ const app = express();
 const port = ( process.argv.length >= 3 && !isNaN(process.argv[2]) )
   ? parseInt(process.argv[2])
   : 3000;
+const akey = ( process.argv.length >= 4 )
+  ? parseInt(process.argv[3])
+  : 'bPNbLXJ0tmmshm3dkk0VQOiUeiPlp186ggvjsnKnaGsiIVnGAe';
+const mock = ( process.argv.length >= 5 && ( parseInt(process.argv[4]) || process.argv[4].toUpperCase()==='TRUE' ) );
 
 var proxy = httpProxy.createProxyServer({
   secure: false
 });
 
+proxy.on('proxyReq', function(proxyReq, req, res, options) {
+  proxyReq.setHeader('X-Mashape-Key', akey);
+});
 
-//var proxy = new httpProxy.RoutingProxy();
-/*
-function apiProxy(host, port) {
-  return function(req, res, next) {
-    if(req.url.match(new RegExp('^\/api\/'))) {
-      proxy.proxyRequest(req, res, {host: host, port: port});
-    } else {
-      next();
-    }
-  }
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Mashape-Key');
+  next();
+});
+
+if (mock) {
+  app.use('/words/example', express.static('mocks/word-example.json'));
+  app.use('/words/work', express.static('mocks/word-work.json'));
 }
 
-app.use(express.static(process.cwd() + "/generated"));
-app.use(apiProxy('localhost', 3000));
-app.use(express.bodyParser());
-app.use(express.errorHandler());
-*/
-
-proxy.on('proxyReq', function(proxyReq, req, res, options) {
-  proxyReq.setHeader('X-Mashape-Key', 'bPNbLXJ0tmmshm3dkk0VQOiUeiPlp186ggvjsnKnaGsiIVnGAe');
-});
-
-app.get('/detect/what-http-headers-is-my-browser-sending', function(req, res) {
-  proxy.web(req, res, {
-    target: 'https://www.whatismybrowser.com'
-  });
-});
-
-app.get('/words/example', function(req, res) {
+app.get('/words/:word', function(req, res) {
+  console.log('Proxifying: ' + req.params.word);
   proxy.web(req, res, {
     target: 'https://wordsapiv1.p.mashape.com'
   });

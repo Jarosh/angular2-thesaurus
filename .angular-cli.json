@@ -10,8 +10,8 @@
       "assets": [
         "assets",
         "favicon.ico",
-        "mocks/example.json",
-        "mocks/work.json"
+        "mocks/word-example.json",
+        "mocks/word-work.json"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -21,8 +21,9 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css",
+        "styles.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.slim.min.js",

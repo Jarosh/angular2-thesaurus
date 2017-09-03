@@ -3,6 +3,8 @@ import { Http, Headers, RequestOptionsArgs } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
+import { environment as env } from './../environments/environment';
+
 import { WordsApiResponse, WordDefinition, GroupedDefinitionsCollection } from './interfaces';
 
 
@@ -10,7 +12,7 @@ import { WordsApiResponse, WordDefinition, GroupedDefinitionsCollection } from '
 export class WordsApiService {
 
   private defaultHeaders: Headers = new Headers({
-    'X-Mashape-Key': 'qwerty'
+    'X-Mashape-Key': env.wordsApiKey
   });
 
   constructor(
@@ -32,7 +34,7 @@ export class WordsApiService {
 
   public requestWordDefinition(word: string): Observable<WordsApiResponse> {
     return this.http.request(
-      `mocks/work.json`, //`https://wordsapiv1.p.mashape.com/words/${word}`,
+      env.wordsApiUrl.replace('{%word%}', word),
       this.getXhrOptions()
     ).map(res => res.json());
   }
@@ -41,7 +43,7 @@ export class WordsApiService {
     let options: RequestOptionsArgs = {
       method: method,
       headers: this.defaultHeaders,
-      withCredentials: true,
+      withCredentials: false,
     };
     if (body) {
       options.body = body;

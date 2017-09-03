@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { AlertModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component/app.component';
 import { AppPageAboutComponent } from './app.page-about.component/app.page-about.component';
@@ -32,6 +33,7 @@ import { routes } from './app.routes'
     FormsModule,
     HttpModule,
     RouterModule.forRoot(routes),
+    AlertModule.forRoot(),
   ],
   providers: [
     WordsApiService,

@@ -1,5 +1,9 @@
 <div>
     <app-search-request [value]="query" (changed)="search($event)"></app-search-request>
     <app-search-results [results]="results"></app-search-results>
+    <div *ngIf="loading" class="loading text-info">
+        <span class="fa fa-spin fa-spinner"></span>
+    </div>
+    <alert *ngIf="warning" type="warning">{{ warning }}</alert>
+    <alert *ngIf="failure" type="danger">{{ failure }}</alert>
 </div>
-

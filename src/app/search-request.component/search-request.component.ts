@@ -25,7 +25,6 @@ export class SearchRequestComponent {
   ngOnInit(): void {
     this.subs.push(this.query$.asObservable()
       .debounceTime(1000)
-      //.filter((value) => true)
       .distinctUntilChanged()
       .subscribe((value: string) => {
         this.emitValue(value);
@@ -45,17 +44,19 @@ export class SearchRequestComponent {
     }
   }
 
-  public onSearch(value: string): void {
-    this.emitValue(value);
+  public onSearch(): void {
+    this.emitValue(this.model);
   }
 
-  public onSearchInput(value: string): void {
-    this.query$.next(value);
+  public onSearchInput(): void {
+    this.query$.next(this.model);
   }
 
   private emitValue(value: string): void {
-    this.changed.emit(value);
-    this.query = value;
+    if (this.query != value) {
+      this.changed.emit(value);
+      this.query = this.model = value;
+    }
   }
 
 }

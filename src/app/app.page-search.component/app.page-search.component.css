@@ -1,3 +1,11 @@
 :host > div {
     padding: 1em 2em;
 }
+
+.loading {
+    text-align: center;
+}
+
+.fa.fa-spin {
+    font-size: 500%;
+}
