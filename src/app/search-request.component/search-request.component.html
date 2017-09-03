@@ -1,0 +1,7 @@
+<div class="form-group">
+    <input class="form-control" type="text" placeholder="Search..."
+           [(ngModel)]="query"
+           (keyup.enter)="onSearch($event.target.value)"
+           (input)="onSearchInput($event.target.value)"
+           />
+</div>

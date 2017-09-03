@@ -1,0 +1,34 @@
+<div *ngIf="results">
+    <h1>{{ results.word }}</h1>
+    <h2 *ngIf="pronunciation && pronunciation.all">{{ pronunciation.all }}</h2>
+    <div *ngFor="let definitionsGroup of getDefinitions() | groupDefinitions">
+        <h4 class="text-success">
+            <i>{{ definitionsGroup.partOfSpeech }}</i>
+        </h4>
+        <ol>
+            <li *ngFor="let word of definitionsGroup.results" class="word-definition">
+                <br/>
+                <p>
+                    <b>{{ word.definition }}</b>
+                </p>
+                <div *ngIf="word.examples && word.examples.length" class="word-definition-sub">
+                    <h5>Usage:</h5>
+                    <ul class="text-muted">
+                        <li *ngFor="let wordUsage of word.examples">
+                            {{ wordUsage }}
+                        </li>
+                    </ul>
+                </div>
+                <div *ngIf="word.synonyms && word.synonyms.length" class="word-definition-sub">
+                    <h5>Synonyms:</h5>
+                    <ul class="text-muted">
+                        <li *ngFor="let wordSynonyms of word.synonyms">
+                            <a [routerLink]="['/search', wordSynonyms]">{{ wordSynonyms }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <hr/>
+            </li>
+        </ol>
+    </div>
+</div>
