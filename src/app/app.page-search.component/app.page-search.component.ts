@@ -45,11 +45,11 @@ export class AppPageSearchComponent {
   }
 
   public search(value: string): void {
-    this.loading = true
     this.results = null;
     this.warning = this.failure = null;
     if (value) {
       console.log(`Search for: ${value}`);
+      this.loading = true;
       this.api.requestWordDefinition(value).subscribe(
         (res: WordsApiResponse) => {
           this.loading = false;

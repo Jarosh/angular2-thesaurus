@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 
 @Component({
@@ -8,5 +9,18 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
+
+  private page = 'index';
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    this.router.events
+      .filter(evt => evt instanceof NavigationEnd)
+      .forEach((evt) => {
+        this.page = this.route.root.firstChild.snapshot.data['page'] || 'index';
+      });
+  }
 
 }

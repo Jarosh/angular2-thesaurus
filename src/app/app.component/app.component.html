@@ -1,10 +1,10 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" routerLink="/">
+            <a class="navbar-brand" [class.active]="page==='index'" routerLink="/">
                 Home
             </a>
-            <a class="navbar-brand" routerLink="/about">
+            <a class="navbar-brand" [class.active]="page==='about'" routerLink="/about">
                 About
             </a>
         </div>

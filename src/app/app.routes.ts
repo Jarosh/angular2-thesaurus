@@ -7,14 +7,17 @@ import { AppPageSearchComponent } from './app.page-search.component/app.page-sea
 export const routes: Routes = [
   {
     path: 'about',
-    component: AppPageAboutComponent
+    component: AppPageAboutComponent,
+    data: { page: 'about' }
   },
   {
     path: 'search/:word',
-    component: AppPageSearchComponent
+    component: AppPageSearchComponent,
+    data: { page: 'index' }
   },
   {
     path: '**',
-    component: AppPageSearchComponent
+    component: AppPageSearchComponent,
+    data: { page: 'index' }
   },
 ];
