@@ -22,6 +22,9 @@ module.exports = function (config) {
     angularCli: {
       environment: 'dev'
     },
+    files: [
+      { pattern: './node_modules/jquery/dist/jquery.min.js', watched: false }
+    ],
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,

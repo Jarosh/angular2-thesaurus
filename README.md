@@ -6,12 +6,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run either `npm run api-start` or if arguments needed `node srv/server.js [ port [ mashape-key [ use-mocks ] ] ]` e.g. `node srv/server.js 3000 qwerty true`
 
+With `use-mocks` option set to either `1` or `true` local mocks will be used for the following two words: 'example', 'work';
+hence guaranteeing positive response for those two words even if invalid mashape key was provided.
+
 ## REST API server testing
 
 Run `npm run api-test`
-
-With `use-mocks` option set to either `1` or `true` local mocks will be used for the following two words: 'example', 'work';
-hence guaranteeing positive response for those two words even if invalid mashape key was provided.
 
 ## Development server
 

@@ -1,20 +1,21 @@
 const express = require('express');
 const httpProxy = require('http-proxy');
 const storage = require('node-persist');
+const config = require('./config');
 const app = express();
 
 const port = process.env.PORT || ( ( process.argv.length >= 3 && !isNaN(process.argv[2]) )
   ? parseInt(process.argv[2])
-  : 3000
+  : config.arg.port
 );
 const akey = process.env.AKEY || ( ( process.argv.length >= 4 )
   ? process.argv[3]
-  : 'qwerty'
+  : config.arg.akey
 );
 const mock = process.env.MOCK || ( process.argv.length >= 5 && ( parseInt(process.argv[4]) || process.argv[4].toUpperCase()==='TRUE' ) );
 
 storage.initSync({
-  dir: 'cache'
+  dir: config.dirs.cache
 });
 
 var proxy = httpProxy.createProxyServer({
@@ -34,26 +35,27 @@ proxy.on('proxyRes', function(proxyRes, req, res) {
 });
 
 app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'OPTIONS, GET');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Mashape-Key');
+  res.header('Access-Control-Allow-Origin', config.cors.origin);
+  res.header('Access-Control-Allow-Methods', config.cors.methods);
+  res.header('Access-Control-Allow-Headers', config.cors.headers);
   next();
 });
 
 if (mock) {
-  app.use('/words/example', express.static('srv/mocks/word-example.json'));
-  app.use('/words/work', express.static('srv/mocks/word-work.json'));
+  config.mocked.forEach((word) => {
+    app.use('/words/'+word, express.static('srv/mocks/word-'+word+'.json'));
+  });
 }
 
 app.get('/words/:word', function(req, res) {
   var cached = storage.getItemSync(req.params.word);
   if (cached) {
-    console.log('Returning from cache: ' + req.params.word);
+    console.log('Serving from cache: ' + req.params.word);
     res.json(cached);
   } else {
-    console.log('Proxifying: ' + req.params.word);
+    console.log('Proxifying to WordsAPI: ' + req.params.word);
     proxy.web(req, res, {
-      target: 'https://wordsapiv1.p.mashape.com'
+      target: config.api
     });
   }
 });
