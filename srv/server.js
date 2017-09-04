@@ -1,6 +1,7 @@
 const express = require('express');
 const httpProxy = require('http-proxy');
 const storage = require('node-persist');
+const util = require('util');
 const config = require('./config');
 const app = express();
 
@@ -23,13 +24,21 @@ var proxy = httpProxy.createProxyServer({
 });
 
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
+  proxyReq.setHeader('Host', config.api.host);
+  proxyReq.setHeader('Accept', 'application/json');
+  proxyReq.setHeader('Accept-Encoding', 'gzip;q=0,deflate,sdch');
   proxyReq.setHeader('X-Mashape-Key', akey);
 });
 
 proxy.on('proxyRes', function(proxyRes, req, res) {
-  if (proxyRes.statusCod===200) {
-    proxyRes.on('data', function(dataBuffer) {
-      storage.setItemSync(req.params.word, JSON.parse(dataBuffer.toString('utf8')));
+  if (proxyRes.statusCode===200) {
+    var body = '';
+    proxyRes.setEncoding('utf-8');
+    proxyRes.on('data', function(data) {
+      body += data.toString('utf-8');
+    });
+    proxyRes.on('end', function() {
+      storage.setItemSync(req.params.word, JSON.parse(body));
     });
   }
 });
@@ -55,7 +64,7 @@ app.get('/words/:word', function(req, res) {
   } else {
     console.log('Proxifying to WordsAPI: ' + req.params.word);
     proxy.web(req, res, {
-      target: config.api
+      target: config.api.scheme+'://'+config.api.host
     });
   }
 });

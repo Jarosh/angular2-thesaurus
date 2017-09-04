@@ -3,7 +3,10 @@ module.exports = {
     port: 3000,
     akey: 'qwerty'
   },
-  api: 'https://wordsapiv1.p.mashape.com',
+  api: {
+    scheme: 'https',
+    host: 'wordsapiv1.p.mashape.com'
+  },
   cors: {
     origin: '*',
     methods: 'OPTIONS, GET',

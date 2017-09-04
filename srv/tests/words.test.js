@@ -1,12 +1,12 @@
 process.env.NODE_ENV = 'test';
-process.env.PORT = 3000;
-process.env.AKEY = 'qwerty';
+process.env.PORT = require('../config').arg.port;
+process.env.AKEY = require('../config').arg.akey;
 process.env.MOCK = true;
 
-let server = require('../server');
-let chai = require('chai');
-let expect =  require('chai').expect;
-let should = require('chai').should();
+const server = require('../server');
+const chai = require('chai');
+const expect =  require('chai').expect;
+const should = require('chai').should();
 
 chai.use(require('chai-http'));
 chai.use(require('chai-json-schema'));
@@ -54,9 +54,9 @@ var wordsApiResponseSchema = {
 
 
 describe('Thesaurus', () => {
-  
+
   describe('GET /words', () => {
-    it('it should not exist', (done) => {
+    it('root /words path should not exist', (done) => {
       chai.request(server)
         .get('/words')
         .end((err, res) => {
@@ -68,7 +68,7 @@ describe('Thesaurus', () => {
   });
   
   describe('GET /words/example', () => {
-    it('it should return valid mock', (done) => {
+    it('example / it should return valid mock', (done) => {
       chai.request(server)
         .get('/words/example')
         .end((err, res) => {
@@ -82,7 +82,7 @@ describe('Thesaurus', () => {
   });
 
   describe('GET /words/work', () => {
-    it('it should return valid mock', (done) => {
+    it('work / it should return valid mock', (done) => {
       chai.request(server)
         .get('/words/work')
         .end((err, res) => {
@@ -95,13 +95,26 @@ describe('Thesaurus', () => {
     });
   });
 
+  describe('GET /words/dog', () => {
+    it('dog / it should return valid real data', (done) => {
+      chai.request(server)
+        .get('/words/dog')
+        .end((err, res) => {
+          expect(res).to.be.json;
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          expect(res.body).to.be.jsonSchema(wordsApiResponseSchema);
+          done();
+        });
+    });
+  });
+
   describe('GET /words/cthulhu', () => {
-    it('it should return \'unauthorized\' code', (done) => {
+    it('cthulhu / it should return 404 (not found) code', (done) => {
       chai.request(server)
         .get('/words/Cthulhu')
         .end((err, res) => {
-          expect(res).to.be.json;
-          res.should.have.status(403);
+          res.should.have.status(404);
           done();
         });
     });

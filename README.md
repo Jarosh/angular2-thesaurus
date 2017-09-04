@@ -2,6 +2,11 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.0.
 
+## Configuration
+
+The only config value that is recommended to change once the repo was checked out is `arg.akey` inside of the `srv/config.js` file.
+By obvious reasons it was considered to be unsafe to expose any real API keys and thus a stub value was used there.
+
 ## REST API server
 
 Run either `npm run api-start` or if arguments needed `node srv/server.js [ port [ mashape-key [ use-mocks ] ] ]` e.g. `node srv/server.js 3000 qwerty true`
